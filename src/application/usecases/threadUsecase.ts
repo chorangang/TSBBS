@@ -33,7 +33,7 @@ export const createThreadUsecase = () => {
   };
 
   const editThread = async (id: number, title: string, body: string): Promise<void> => {
-		const selected: Thread|null = threadMapper(await selectThread(id));
+		const selected = threadMapper(await selectThread(id));
 
 		if (!selected) {
       throw new appError(404, "Thread not found");
@@ -41,7 +41,7 @@ export const createThreadUsecase = () => {
 
 		const thread = newThread(
 				selected.id,
-				selected.user_id,
+				selected.user.id,
 				title,
 				body,
 				selected.created_at,

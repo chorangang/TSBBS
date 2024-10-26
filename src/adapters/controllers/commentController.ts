@@ -1,32 +1,32 @@
+import { commentUsecase } from "../../application/usecases/commentUsecase";
 import { handler } from "./handler";
 
 export const commentController = () => {
-    const { createComment, getCommentsByThreadId, getCommentById, updateComment, deleteComment } = commentUsecase();
+    const { getComments, createComment, editComment, destroyComment } = commentUsecase();
 
-    const saveComment = handler(async (req, res) => {
-        await createComment(req.body.thread_id, req.body.content);
-        res.status(201).json({ message: "Comment created" });
-    });
-
-    const getComments = handler(async (req, res) => {
-        const comments = await getCommentsByThreadId(req.params.thread_id);
+    const indexComments = handler(async (req, res) => {
+        const comments = await getComments(parseInt(req.params.thread_id));
         res.status(200).json(comments);
     });
 
-    const getComment = handler(async (req, res) => {
-        const comment = await getCommentById(req.params.id);
-        res.status(200).json(comment);
+    const saveComment = handler(async (req, res) => {
+        await createComment(
+            parseInt(req.body.thread_id),
+            parseInt(req.body.user_id),
+            req.body.body
+        );
+        res.status(201).json({ message: "Comment created" });
     });
 
-    const editComment = handler(async (req, res) => {
-        await updateComment(req.params.id, req.body.content);
+    const putComment = handler(async (req, res) => {
+        await editComment(parseInt(req.params.id), req.body.body);
         res.status(200).json({ message: "Comment updated" });
     });
 
     const removeComment = handler(async (req, res) => {
-        await deleteComment(req.params.id);
+        await destroyComment(parseInt(req.params.id));
         res.status(200).json({ message: "Comment deleted" });
     });
 
-    return { saveComment, getComments, getComment, editComment, removeComment };
+    return { saveComment, indexComments, putComment, removeComment };
 }

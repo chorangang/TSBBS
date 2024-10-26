@@ -1,10 +1,12 @@
 import { formatDate } from '../../utils/helper';
-import { Thread } from '../../utils/types';
 
-export const threadMapper = (thread: any): Thread|null => {
+export const threadMapper = (thread: any) => {
     return {
         id: thread.id,
-        user_id: thread.user_id,
+        user: {
+            id:   thread.user.id,
+            name: thread.user.name,
+        },
         title: thread.title,
         body: thread.body,
         created_at: formatDate(thread.created_at),

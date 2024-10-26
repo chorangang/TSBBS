@@ -7,18 +7,25 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
     const token = req.headers["authorization"];
 
-    console.log("token:", token, "request headers:", req.headers);
+    console.log("token:", token);
 
     if(req.path === "/api/login" || req.path === "/api/register") {
+        console.log("login or register");
         next();
         return;
     }
 
     if (!token) {
-        throw new appError(401, "No token provided");
+        console.log("No token provided");
+        res.status(401).json({ message: "No token provided" });
+        return;
     }
 
-    if (verifyToken(token)) {
-        next();
+    if (!verifyToken(token)) {
+        console.log("Invalid token");
+        res.status(401).json({ message: "Invalid token" });
+        return;
     }
+
+    next();
 }

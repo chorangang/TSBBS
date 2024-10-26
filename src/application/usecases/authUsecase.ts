@@ -9,6 +9,8 @@ export const createAuthUsecase = () => {
     const { selectUserByEmail } = userRepository();
 
     const authParams = async (email: string, password: string): Promise<boolean> => {
+        console.log("authParams");
+
         const user = await selectUserByEmail(email);
 
         if (!user) {
@@ -25,6 +27,7 @@ export const createAuthUsecase = () => {
     };
 
     const generateToken = async (email: string, password: string) => {
+        console.log("generateToken");
         const token = jwt.sign(
             { email: email },
             jwtPrivateKey,
@@ -33,18 +36,16 @@ export const createAuthUsecase = () => {
                 expiresIn: '1h'
             },
         );
-        console.log(token);
         return token;
     };
 
     const verifyToken = (token: string) => {
         try {
-            console.log("token:", token);
-            const decoded = jwt.verify(token, jwtPublicKey);
-            console.log("decodedToken:", decoded);
+            console.log("verifyToken");
+            jwt.verify(token, jwtPublicKey);
             return true;
         } catch (error) {
-            throw new appError(401, 'Invalid token');
+            return false;
         }
     }
 

@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "express";
 import session from "express-session";
+import cors from "cors";
 import { port } from "./utils/config";
 import { router } from "./adapters/router";
 import { notFound } from "./adapters/middleware/notFound";
@@ -8,6 +9,11 @@ import { errorHandler } from "./adapters/middleware/errorHandler";
 import { authenticate } from "./adapters/middleware/authenticate";
 
 const app = express();
+
+app.use(cors({
+    origin: "http://localhost:3000", // ReactアプリのURL
+    credentials: true,
+}));
 
 app.use(
     session({

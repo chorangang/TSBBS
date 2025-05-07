@@ -14,7 +14,7 @@ RUN npm install -g typescript
 COPY . .
 
 # アプリケーションのポートを開放
-EXPOSE 3000
+EXPOSE 4000
 
 # ts-nodeでアプリケーションを起動
 CMD ["npm", "run", "start"]
